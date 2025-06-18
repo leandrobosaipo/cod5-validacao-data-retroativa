@@ -231,6 +231,26 @@ function cod5_validar_data_retroativa( $user_id, $user_login, $post_id, $post_ty
 
     COD5_Utils::debug_log("Validando: User ID {$user_id}, Post ID {$post_id}, Status {$post_status}, Data {$post_date}");
 
+    // Se for uma atualização e a data não mudou, pula a validação
+    if ( $acao === 'atualizacao' && $post_id > 0 ) {
+        $original_post = get_post( $post_id );
+        $original_date = $original_post ? $original_post->post_date : '';
+
+        if ( $original_date ) {
+            $original_dt = new DateTime( $original_date );
+            $post_dt     = new DateTime( $post_date );
+
+            // Ignora os segundos na comparação
+            $original_dt->setTime( $original_dt->format('H'), $original_dt->format('i'), 0 );
+            $post_dt->setTime( $post_dt->format('H'), $post_dt->format('i'), 0 );
+
+            if ( $original_dt->format('Y-m-d H:i') === $post_dt->format('Y-m-d H:i') ) {
+                COD5_Utils::debug_log('Data original e nova iguais. Pulando validação.');
+                return true;
+            }
+        }
+    }
+
     // Verifica se o status deve ser validado
     if ( ! COD5_Utils::status_deve_ser_validado( $post_status ) ) {
         COD5_Utils::debug_log("Status {$post_status} não requer validação");

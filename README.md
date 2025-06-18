@@ -99,6 +99,11 @@ const STATUS_VALIDADOS = array(
 const MENSAGEM_PADRAO = 'Sua mensagem personalizada aqui.';
 ```
 
+#### 6. Edição sem Alterar Data
+Autores podem atualizar posts já publicados sem acionar a validação de data retroativa,
+desde que a data de publicação permaneça exatamente a mesma. Qualquer mudança na data
+continuará passando pelas regras normais de validação.
+
 ## 🚀 Instalação
 
 1. Faça upload do plugin para `/wp-content/plugins/`
